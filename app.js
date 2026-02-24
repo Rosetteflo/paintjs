@@ -4,6 +4,7 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 const save = document.getElementById("jsSave");
+const erase = document.getElementById("eraserBtn");
 
 const INITIAL_COLOR = "#2c2c2c"
 const CANVAS_SIZE = "700"
@@ -17,6 +18,7 @@ ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false;
+let isEraser = false;
 let filling = false;
 
 function stopPainting() {
@@ -25,9 +27,29 @@ function stopPainting() {
 function startPainting() {
     painting = true;
 }
+
+// function onMousemove(event){
+//     const x = event.offsetX;
+//     const y = event.offsetY;
+//     if(!painting) {
+//         ctx.beginPath();
+//         ctx.moveTo(x,y);
+//     } else {
+//         ctx.lineTo(x,y);
+//         ctx.stroke();
+//     }
+// }
+
 function onMousemove(event){
     const x = event.offsetX;
     const y = event.offsetY;
+
+    if (isEraser) {
+        ctx.globalCompositeOperation = "destination-out";
+    } else {
+        ctx.globalCompositeOperation = "source-over";
+    }
+
     if(!painting) {
         ctx.beginPath();
         ctx.moveTo(x,y);
@@ -102,3 +124,10 @@ if(mode){
 if(save){
     save.addEventListener("click",saveClick)
 }
+
+if (erase) {
+  erase.addEventListener("click", () => {
+    isEraser = true;
+  });
+}
+
